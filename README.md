@@ -1,1 +1,3 @@
-# Dacia-Backend
+<h1 align="center" id="title">Docia</h1>
+
+<p id="description">Title: Documentation and API Contract Management Portal Develop a Documentation Portal that serves as a centralized hub for managing project documentation and interactive API contracts. The portal will support multiple documentation formats and offer a modern responsive user interface for seamless accessibility and collaboration. Key Features: Documentation Management - User to be able to write or update documentation for a feature. An admin user should be able to view all and approve the documentation. Add documentation for internal APIs present in Ongrid Interactive API documentation with Swagger/OpenAPI integration(optional)</p>
