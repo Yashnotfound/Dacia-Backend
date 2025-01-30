@@ -25,9 +25,10 @@ public class User {
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
-    private Role type;
+    private Role role;
 
     @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
 }

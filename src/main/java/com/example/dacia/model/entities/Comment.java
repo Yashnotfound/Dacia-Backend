@@ -30,7 +30,8 @@ public class Comment {
     private String content;
 
     @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
-
+    @Column(name = "is_deleted")
     private boolean isDeleted;
 }

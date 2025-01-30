@@ -35,17 +35,21 @@ public class Document {
     private User createdBy;
 
     @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "document_type")
     private DocType documentType;
 
     @UpdateTimestamp
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
 
     @ManyToOne
     @JoinColumn(name = "updated_by")
     private User updatedBy;
 
+    @Column(name = "is_deleted")
     private boolean isDeleted;
 }

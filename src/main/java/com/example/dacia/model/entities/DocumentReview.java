@@ -33,5 +33,6 @@ public class DocumentReview {
     private String comments;
 
     @CreationTimestamp
+    @Column(name = "last_reviewed_at")
     private LocalDateTime lastReviewedAt;
 }
