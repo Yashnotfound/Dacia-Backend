@@ -1,7 +1,6 @@
 package com.example.dacia.controller;
 
 import com.example.dacia.dto.request.UserRegistrationRequest;
-import com.example.dacia.dto.response.UserResponse;
 import com.example.dacia.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +19,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
-    UserResponse response = userService.registerUser(request);
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
+    String response = userService.registerUser(request);
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
