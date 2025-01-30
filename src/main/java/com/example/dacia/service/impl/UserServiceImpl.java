@@ -1,6 +1,7 @@
 package com.example.dacia.service.impl;
 
 import com.example.dacia.dao.UserRepository;
+import com.example.dacia.dto.request.UserLoginRequest;
 import com.example.dacia.dto.request.UserRegistrationRequest;
 import com.example.dacia.model.entities.User;
 import com.example.dacia.service.UserService;
@@ -27,5 +28,17 @@ public class UserServiceImpl implements UserService {
         user.setPasswordHash(BCrypt.hashpw(request.password(), BCrypt.gensalt(12)));
         userRepository.save(user);
         return jwtUtil.generateToken(user.getEmail());
+    }
+    @Override
+    public String loginUser(UserLoginRequest request) {
+        if(!userRepository.existsByEmail(request.email())) {
+            throw new RuntimeException("Email does not exist");
+        }
+        User user = userRepository.findByEmail(request.email());
+        if(BCrypt.checkpw(request.password(), user.getPasswordHash())) {
+            return jwtUtil.generateToken(user.getEmail());
+        }else {
+            throw new RuntimeException("Invalid credentials");
+        }
     }
 }
