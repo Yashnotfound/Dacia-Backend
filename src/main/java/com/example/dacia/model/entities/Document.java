@@ -1,4 +1,7 @@
-package com.example.dacia.Entities;
+package com.example.dacia.model.entities;
+import com.example.dacia.model.enums.DocType;
+import com.example.dacia.model.enums.DocumentStatus;
+
 import java.time.LocalDateTime;
 
 public class Document {
@@ -12,11 +15,4 @@ public class Document {
     private LocalDateTime lastUpdated;
     private Long updatedBy; // FK to User
     private boolean isDeleted;
-}
-enum DocumentStatus {
-    APPROVED, PENDING, REJECTED
-}
-
-enum DocType {
-    GENERAL, API_CONTRACT
 }

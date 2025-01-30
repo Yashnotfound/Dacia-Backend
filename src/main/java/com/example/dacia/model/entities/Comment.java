@@ -1,4 +1,4 @@
-package com.example.dacia.Entities;
+package com.example.dacia.model.entities;
 
 import java.time.LocalDateTime;
 

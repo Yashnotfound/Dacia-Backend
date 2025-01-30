@@ -1,5 +1,6 @@
-package com.example.dacia.Entities;
-import org.hibernate.usertype.UserType;
+package com.example.dacia.model.entities;
+
+import com.example.dacia.model.enums.Role;
 
 public class User {
     private Long id;
@@ -7,8 +8,4 @@ public class User {
     private String email;
     private String hashPassword;
     private Role type;
-}
-
-enum Role {
-    ADMIN, END_USER
 }

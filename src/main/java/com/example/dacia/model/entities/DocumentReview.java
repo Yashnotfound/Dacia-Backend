@@ -1,4 +1,6 @@
-package com.example.dacia.Entities;
+package com.example.dacia.model.entities;
+
+import com.example.dacia.model.enums.ReviewStatus;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +12,4 @@ public class DocumentReview {
     private String comments;
     private LocalDateTime lastReviewedAt;
 
-}
-enum ReviewStatus {
-    APPROVED, REJECTED
 }
