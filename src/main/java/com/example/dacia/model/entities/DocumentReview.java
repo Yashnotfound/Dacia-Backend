@@ -10,7 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "document_reviews")
+@Table()
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,11 +20,11 @@ public class DocumentReview {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "doc_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Document document;
 
     @ManyToOne
-    @JoinColumn(name = "admin_id", nullable = false)
+    @JoinColumn(nullable = false)
     private User admin;
 
     @Enumerated(EnumType.STRING)
@@ -33,6 +33,6 @@ public class DocumentReview {
     private String comments;
 
     @CreationTimestamp
-    @Column(name = "last_reviewed_at")
+    @Column()
     private LocalDateTime lastReviewedAt;
 }

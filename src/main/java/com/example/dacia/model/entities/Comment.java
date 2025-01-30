@@ -9,7 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "comments")
+@Table()
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,19 +19,17 @@ public class Comment {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "doc_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Document document;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(nullable = false)
     private User user;
 
     @Lob
     private String content;
 
     @CreationTimestamp
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
-    @Column(name = "is_deleted")
     private boolean isDeleted;
 }
