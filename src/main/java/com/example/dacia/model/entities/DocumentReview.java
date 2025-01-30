@@ -21,11 +21,11 @@ public class DocumentReview {
 
     @ManyToOne
     @JoinColumn(name = "doc_id", nullable = false)
-    private Document docId;
+    private Document document;
 
     @ManyToOne
     @JoinColumn(name = "admin_id", nullable = false)
-    private User adminId;
+    private User admin;
 
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
