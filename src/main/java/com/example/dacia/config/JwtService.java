@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -22,14 +24,33 @@ public class JwtService {
             "8ad3e1c9b1b11b3c66450c8086ca07bb25f03ac38e9ab96e140657d8b18967eda03e4456659e13a4b7450b36d197ca8353701cbda17e759f7c3e87de8185bfa5" +
             "bbdbb1f7090e26f6b2781d1d4797480ba043fe5f2ff50848feebf6d0085e4247074631aa5b7cb2a7dc2eecfa3ce8986b454ab412211226c1358a7206b46f8961";
     public String extractUsername(String token){
-        return null;
+        return extractClaim(token, Claims::getSubject);
     }
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
+
+    public List<String> extractRoles(String token) {
+        Claims claims = extractAllClaims(token);
+
+        // Extract "role" array from claims
+        List<Map<String, String>> roleObjects = claims.get("role", List.class);
+
+        if (roleObjects == null) {
+            return List.of(); // No roles found
+        }
+
+        // Convert each map object to role strings
+        return roleObjects.stream()
+                .map(role -> role.get("authority")) // Extract "authority" value
+                .collect(Collectors.toList());
+    }
+
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", userDetails.getAuthorities());
+        return generateToken(claims, userDetails);
     }
     public boolean isTokenValid(String token,UserDetails userDetails) {
         final String username = extractUsername(token);
