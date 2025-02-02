@@ -19,4 +19,5 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
 
     // Find documents created by a specific user
     List<Document> findByCreatedBy(User createdBy);
+    List<Document> findByIsDeletedFalse();
 }

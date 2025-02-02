@@ -7,6 +7,7 @@ import com.example.dacia.dto.request.RegisterRequest;
 import com.example.dacia.dto.response.AuthenticationResponse;
 import com.example.dacia.model.entities.User;
 import com.example.dacia.model.enums.Role;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .name(request.getUsername())
