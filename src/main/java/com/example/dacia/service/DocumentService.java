@@ -38,22 +38,37 @@ public class DocumentService {
         documentRepository.save(document);
         return "Document saved";
     }
-    public List<DocumentViewResponse> filterDocuments(String author, DocType docType,DocumentStatus docStatus) {
+    public List<DocumentViewResponse> findDocuments(String title, String author, DocType docType,DocumentStatus docStatus) {
 
-        List<Document> docs = documentRepository.findByFilters(author, docType, docStatus);
+        List<Document> docs = documentRepository.searchAndFilter(title,author, docType, docStatus);
         List<DocumentViewResponse> responses = new ArrayList<>();
         for (Document document : docs) {
             responses.add(DocumentViewResponse.builder()
-                    .Title(document.getTitle())
-                    .Content(document.getContent())
+                    .id(document.getId())
+                    .title(document.getTitle())
+                    .content(document.getContent())
                     .type(document.getDocumentType())
-                    .CreatedBy(document.getCreatedBy().getName())
-                    .CreatedDate(document.getCreatedAt())
-                    .LastModifiedBy(document.getUpdatedBy().getName())
-                    .LastModifiedDate(document.getLastUpdated())
+                    .createdBy(document.getCreatedBy().getName())
+                    .createdDate(document.getCreatedAt())
+                    .lastModifiedBy(document.getUpdatedBy().getName())
+                    .lastModifiedDate(document.getLastUpdated())
                     .build());
         }
         return responses;
+    }
+
+    public DocumentViewResponse getDocumentById(Long id) {
+        Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
+            return DocumentViewResponse.builder()
+                    .id(document.getId())
+                    .title(document.getTitle())
+                    .content(document.getContent())
+                    .type(document.getDocumentType())
+                    .createdBy(document.getCreatedBy().getName())
+                    .createdDate(document.getCreatedAt())
+                    .lastModifiedBy(document.getUpdatedBy().getName())
+                    .lastModifiedDate(document.getLastUpdated())
+                    .build();
     }
 
 }

@@ -13,11 +13,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class DocumentViewResponse {
-    private String Title;
-    private String Content;
-    private String CreatedBy;
+    private long id;
+    private String title;
+    private String content;
+    private String createdBy;
     private DocType type;
-    private String LastModifiedBy;
-    private LocalDateTime CreatedDate;
-    private LocalDateTime LastModifiedDate;
+    private String lastModifiedBy;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
 }

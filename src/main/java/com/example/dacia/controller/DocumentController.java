@@ -21,9 +21,13 @@ public class DocumentController {
     public ResponseEntity<String> createDocument(@RequestBody DocumentCreateRequest document, Principal principal) {
         return ResponseEntity.ok(documentService.save(document, principal));
     }
-    @GetMapping("/filter")
-    public ResponseEntity<List<DocumentViewResponse>> getAllDocuments(@RequestParam(required = false)String author, @RequestParam(required = false) DocType type, @RequestParam(required = false)DocumentStatus status) {
-        return ResponseEntity.ok(documentService.filterDocuments(author,type,status));
+    @GetMapping("/find")
+    public ResponseEntity<List<DocumentViewResponse>> getAllDocuments(@RequestParam(required = false) String title,@RequestParam(required = false)String author, @RequestParam(required = false) DocType type, @RequestParam(required = false)DocumentStatus status) {
+        return ResponseEntity.ok(documentService.findDocuments(title,author,type,status));
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<DocumentViewResponse> getDocument(@PathVariable Long id) {
+        return ResponseEntity.ok(documentService.getDocumentById(id));
     }
 
 }

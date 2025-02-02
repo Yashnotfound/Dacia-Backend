@@ -49,5 +49,5 @@ public class Document {
     @JoinColumn()
     private User updatedBy;
 
-    private boolean isDeleted = Boolean.FALSE;
+    private boolean isDeleted = false;
 }
