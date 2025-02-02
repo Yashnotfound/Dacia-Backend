@@ -2,6 +2,8 @@ package com.example.dacia.controller;
 
 import com.example.dacia.dto.request.DocumentCreateRequest;
 import com.example.dacia.dto.response.DocumentViewResponse;
+import com.example.dacia.model.enums.DocType;
+import com.example.dacia.model.enums.DocumentStatus;
 import com.example.dacia.service.DocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +21,9 @@ public class DocumentController {
     public ResponseEntity<String> createDocument(@RequestBody DocumentCreateRequest document, Principal principal) {
         return ResponseEntity.ok(documentService.save(document, principal));
     }
-    @GetMapping
-    public ResponseEntity<List<DocumentViewResponse>> getAllDocuments() {
-        return ResponseEntity.ok(documentService.view());
+    @GetMapping("/filter")
+    public ResponseEntity<List<DocumentViewResponse>> getAllDocuments(@RequestParam(required = false)String author, @RequestParam(required = false) DocType type, @RequestParam(required = false)DocumentStatus status) {
+        return ResponseEntity.ok(documentService.filterDocuments(author,type,status));
     }
 
 }

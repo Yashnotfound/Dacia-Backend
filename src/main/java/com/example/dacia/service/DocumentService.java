@@ -6,6 +6,7 @@ import com.example.dacia.dto.request.DocumentCreateRequest;
 import com.example.dacia.dto.response.DocumentViewResponse;
 import com.example.dacia.model.entities.Document;
 import com.example.dacia.model.entities.User;
+import com.example.dacia.model.enums.DocType;
 import com.example.dacia.model.enums.DocumentStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,21 +38,22 @@ public class DocumentService {
         documentRepository.save(document);
         return "Document saved";
     }
-    public List<DocumentViewResponse> view() {
-        List<Document> docs = documentRepository.findByIsDeletedFalse();
-        List<DocumentViewResponse> documentViewResponses = new ArrayList<>();
+    public List<DocumentViewResponse> filterDocuments(String author, DocType docType,DocumentStatus docStatus) {
+
+        List<Document> docs = documentRepository.findByFilters(author, docType, docStatus);
+        List<DocumentViewResponse> responses = new ArrayList<>();
         for (Document document : docs) {
-            var doc = DocumentViewResponse.builder()
+            responses.add(DocumentViewResponse.builder()
                     .Title(document.getTitle())
                     .Content(document.getContent())
+                    .type(document.getDocumentType())
                     .CreatedBy(document.getCreatedBy().getName())
                     .CreatedDate(document.getCreatedAt())
                     .LastModifiedBy(document.getUpdatedBy().getName())
                     .LastModifiedDate(document.getLastUpdated())
-                    .build();
-            documentViewResponses.add(doc);
+                    .build());
         }
-        return documentViewResponses;
+        return responses;
     }
 
 }
