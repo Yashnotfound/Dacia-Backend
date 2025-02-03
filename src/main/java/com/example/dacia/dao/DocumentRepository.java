@@ -32,4 +32,6 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     boolean findByTitle(String title);
 
     boolean existsByTitle(String title);
+
+    boolean existsByIdAndDeleted(Long id, boolean deleted);
 }
