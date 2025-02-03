@@ -3,6 +3,7 @@ package com.example.dacia.model.entities;
 import com.example.dacia.model.enums.ReviewStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class DocumentReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
