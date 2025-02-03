@@ -16,7 +16,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,13 +24,16 @@ public class DocumentService {
     private final UserRepository userRepository;
 
     public String save(DocumentCreateRequest request, Principal principal) {
-        Optional<User> user = userRepository.findByEmail(principal.getName());
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        if(request.getTitle().isEmpty() || request.getTitle().trim().isEmpty()){
+            throw new RuntimeException("Title is empty");
+        }
         var document = Document.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
                 .documentType(request.getType())
-                .createdBy(user.orElse(null))
-                .updatedBy(user.orElse(null))
+                .createdBy(user)
+                .updatedBy(user)
                 .createdAt(LocalDateTime.now())
                 .lastUpdated(LocalDateTime.now())
                 .status(DocumentStatus.PENDING)
@@ -39,9 +41,10 @@ public class DocumentService {
         documentRepository.save(document);
         return "Document saved";
     }
-    public List<DocumentViewResponse> findDocuments(String title, String author, DocType docType,DocumentStatus docStatus) {
 
-        List<Document> docs = documentRepository.searchAndFilter(title,author, docType, docStatus);
+    public List<DocumentViewResponse> findDocuments(String title, String author, DocType docType, DocumentStatus docStatus) {
+
+        List<Document> docs = documentRepository.searchAndFilter(title, author, docType, docStatus);
         List<DocumentViewResponse> responses = new ArrayList<>();
         for (Document document : docs) {
             responses.add(DocumentViewResponse.builder()
@@ -60,37 +63,61 @@ public class DocumentService {
 
     public DocumentViewResponse getDocumentById(Long id) {
         Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
-        if(document.isDeleted()){throw new RuntimeException("Document is deleted");}
-            return DocumentViewResponse.builder()
-                    .id(document.getId())
-                    .title(document.getTitle())
-                    .content(document.getContent())
-                    .type(document.getDocumentType())
-                    .createdBy(document.getCreatedBy().getName())
-                    .createdDate(document.getCreatedAt())
-                    .lastModifiedBy(document.getUpdatedBy().getName())
-                    .lastModifiedDate(document.getLastUpdated())
-                    .build();
+        if (document.isDeleted()) {
+            throw new RuntimeException("Document is deleted");
+        }
+        return DocumentViewResponse.builder()
+                .id(document.getId())
+                .title(document.getTitle())
+                .content(document.getContent())
+                .type(document.getDocumentType())
+                .createdBy(document.getCreatedBy().getName())
+                .createdDate(document.getCreatedAt())
+                .lastModifiedBy(document.getUpdatedBy().getName())
+                .lastModifiedDate(document.getLastUpdated())
+                .build();
     }
-    public String updateDocumentById(Long id,DocumentCreateRequest request, Principal principal) {
-        Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
+
+    public String updateDocumentById(Long id, DocumentCreateRequest request, DocumentStatus status, Principal principal) {
+        Document document = documentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Document not found"));
+
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
-        if(user.getName().equals(document.getCreatedBy().getName())||user.getRole()== Role.ADMIN){
+
+        boolean isOwner = user.getName().equals(document.getCreatedBy().getName());
+        boolean isAdmin = user.getRole() == Role.ADMIN;
+
+        if (!isOwner && !isAdmin) {
+            throw new RuntimeException("User not authorized");
+        }
+
+        if (request != null) {
             document.setTitle(request.getTitle());
             document.setContent(request.getContent());
             document.setUpdatedBy(user);
             document.setLastUpdated(LocalDateTime.now());
             document.setStatus(DocumentStatus.PENDING);
-            documentRepository.save(document);
-            return "Document updated";
         }
-       throw new RuntimeException("User not authorized");
+
+        if (isAdmin && status != null) {
+            document.setStatus(status);
+        } else if (status != null) {
+            throw new RuntimeException("Only admins can change document status");
+        } else {
+            throw new RuntimeException("Status not found");
+        }
+
+        documentRepository.save(document);
+        return "Document updated successfully";
     }
+
     public String deleteDocumentById(Long id, Principal principal) {
         Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
-        if(user.getName().equals(document.getCreatedBy().getName())||user.getRole()== Role.ADMIN) {
+        if (user.getName().equals(document.getCreatedBy().getName()) || user.getRole() == Role.ADMIN) {
             document.setDeleted(true);
+            document.setUpdatedBy(user);
+            document.setLastUpdated(LocalDateTime.now());
             documentRepository.save(document);
             return "Document deleted";
         }

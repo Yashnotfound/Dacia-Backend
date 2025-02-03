@@ -30,12 +30,12 @@ public class DocumentController {
         return ResponseEntity.ok(documentService.getDocumentById(id));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateDocument(Principal principal,@PathVariable Long id,@RequestBody DocumentCreateRequest document)
+    public ResponseEntity<String> updateDocument(Principal principal,@RequestParam (required = false) DocumentStatus status,@PathVariable Long id,@RequestBody(required = false) DocumentCreateRequest document)
     {
-    return ResponseEntity.ok(documentService.updateDocumentById(id,document,principal));
+    return ResponseEntity.ok(documentService.updateDocumentById(id,document,status,principal));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDocument(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<String> deleteDocument(@PathVariable Long id,Principal principal) {
         return ResponseEntity.ok(documentService.deleteDocumentById(id,principal));
     }
 
