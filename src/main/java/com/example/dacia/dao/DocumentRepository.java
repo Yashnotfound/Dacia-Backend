@@ -25,5 +25,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
             @Param("type") DocType type,
             @Param("status") DocumentStatus status);
 
+    Boolean isDeletedFalse();
+
 
 }

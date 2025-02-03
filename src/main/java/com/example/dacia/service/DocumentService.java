@@ -2,13 +2,14 @@ package com.example.dacia.service;
 
 import com.example.dacia.dao.DocumentRepository;
 import com.example.dacia.dao.UserRepository;
-import com.example.dacia.dto.request.DocumentCreateRequest;
-import com.example.dacia.dto.response.DocumentViewResponse;
+import com.example.dacia.dto.request.DocumentRequest;
+import com.example.dacia.dto.response.DocumentResponse;
 import com.example.dacia.model.entities.Document;
 import com.example.dacia.model.entities.User;
 import com.example.dacia.model.enums.DocType;
 import com.example.dacia.model.enums.DocumentStatus;
 import com.example.dacia.model.enums.Role;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,8 @@ public class DocumentService {
     private final DocumentRepository documentRepository;
     private final UserRepository userRepository;
 
-    public String save(DocumentCreateRequest request, Principal principal) {
+    @Transactional
+    public String save(DocumentRequest request, Principal principal) {
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         if(request.getTitle().isEmpty() || request.getTitle().trim().isEmpty()){
             throw new RuntimeException("Title is empty");
@@ -42,12 +44,12 @@ public class DocumentService {
         return "Document saved";
     }
 
-    public List<DocumentViewResponse> findDocuments(String title, String author, DocType docType, DocumentStatus docStatus) {
+    public List<DocumentResponse> findDocuments(String title, String author, DocType docType, DocumentStatus docStatus) {
 
         List<Document> docs = documentRepository.searchAndFilter(title, author, docType, docStatus);
-        List<DocumentViewResponse> responses = new ArrayList<>();
+        List<DocumentResponse> responses = new ArrayList<>();
         for (Document document : docs) {
-            responses.add(DocumentViewResponse.builder()
+            responses.add(DocumentResponse.builder()
                     .id(document.getId())
                     .title(document.getTitle())
                     .content(document.getContent())
@@ -61,12 +63,12 @@ public class DocumentService {
         return responses;
     }
 
-    public DocumentViewResponse getDocumentById(Long id) {
+    public DocumentResponse getDocumentById(Long id) {
         Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
         if (document.isDeleted()) {
             throw new RuntimeException("Document is deleted");
         }
-        return DocumentViewResponse.builder()
+        return DocumentResponse.builder()
                 .id(document.getId())
                 .title(document.getTitle())
                 .content(document.getContent())
@@ -77,8 +79,8 @@ public class DocumentService {
                 .lastModifiedDate(document.getLastUpdated())
                 .build();
     }
-
-    public String updateDocumentById(Long id, DocumentCreateRequest request, DocumentStatus status, Principal principal) {
+    @Transactional
+    public String updateDocumentById(Long id, DocumentRequest request, DocumentStatus status, Principal principal) {
         Document document = documentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Document not found"));
 
@@ -110,7 +112,7 @@ public class DocumentService {
         documentRepository.save(document);
         return "Document updated successfully";
     }
-
+    @Transactional
     public String deleteDocumentById(Long id, Principal principal) {
         Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));

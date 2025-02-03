@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DocumentViewResponse {
+public class DocumentResponse {
     private long id;
     private String title;
     private String content;

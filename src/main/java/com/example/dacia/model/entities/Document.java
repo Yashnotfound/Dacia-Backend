@@ -49,5 +49,6 @@ public class Document {
     @JoinColumn()
     private User updatedBy;
 
+    @Builder.Default
     private boolean isDeleted = false;
 }

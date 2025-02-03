@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DocumentCreateRequest {
+public class DocumentRequest {
     private String title;
     private String content;
     private DocType type;
