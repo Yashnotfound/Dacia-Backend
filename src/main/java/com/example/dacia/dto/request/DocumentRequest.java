@@ -1,17 +1,17 @@
 package com.example.dacia.dto.request;
 
 import com.example.dacia.model.enums.DocType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DocumentRequest {
+    @NotNull(message = "title cannot be null")
     private String title;
     private String content;
+    @NotNull(message = "Doctype must be provided")
     private DocType type;
 }

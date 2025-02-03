@@ -11,7 +11,6 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    // Find comments for a specific document
     List<Comment> findByDocument(Document document);
 
     Optional<Comment> findByIdAndDeleted(Long id, boolean deleted);

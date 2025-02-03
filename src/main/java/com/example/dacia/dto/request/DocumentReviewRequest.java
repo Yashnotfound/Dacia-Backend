@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DocumentReviewRequest {
-    @NotNull
+    @NotNull(message = "status must be provided")
     private ReviewStatus status;
     private String comment;
 }
