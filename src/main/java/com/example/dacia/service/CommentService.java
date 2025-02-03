@@ -25,10 +25,10 @@ public class CommentService {
     @Transactional
     public String save(long docId,CommentRequest request, Principal principal) {
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(()->new RuntimeException("User not found"));
-        boolean validDoc = documentRepository.findById(docId).isPresent();
-        if(validDoc){
-            Document doc = documentRepository.findById(docId).orElseThrow(()->new RuntimeException("Document not found"));
-            if(doc.isDeleted()){throw new RuntimeException(("Document is Deleted"));}
+        Document doc = documentRepository.findById(docId).orElseThrow(()->new RuntimeException("Document not found"));
+        if(doc.isDeleted()) {
+            throw new RuntimeException("Document is deleted");
+        }
             Comment comment = Comment.builder()
                             .content(request.getContent())
                             .user(user)
@@ -37,9 +37,5 @@ public class CommentService {
                             .build();
             commentRepository.save(comment);
             return "Comment saved successfully";
-        }
-        else{
-            throw new RuntimeException("Document is Deleted");
-        }
     }
 }

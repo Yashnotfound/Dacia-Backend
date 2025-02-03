@@ -11,7 +11,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // Find comments for a specific document
     List<Comment> findByDocument(Document document);
-
-    // Find non-deleted comments
-    List<Comment> findByIsDeletedFalse();
 }

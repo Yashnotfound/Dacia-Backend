@@ -50,5 +50,5 @@ public class Document {
     private User updatedBy;
 
     @Builder.Default
-    private boolean isDeleted = false;
+    private boolean deleted = false;
 }

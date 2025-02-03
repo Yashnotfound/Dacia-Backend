@@ -30,6 +30,9 @@ public class DocumentService {
         if(request.getTitle().isEmpty() || request.getTitle().trim().isEmpty()){
             throw new RuntimeException("Title is empty");
         }
+        if(documentRepository.existsByTitle(request.getTitle())){
+            throw new RuntimeException("Title already exist");
+        }
         var document = Document.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
@@ -64,10 +67,7 @@ public class DocumentService {
     }
 
     public DocumentResponse getDocumentById(Long id) {
-        Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
-        if (document.isDeleted()) {
-            throw new RuntimeException("Document is deleted");
-        }
+        Document document = documentRepository.findByIdAndDeleted(id,false).orElseThrow(() -> new RuntimeException("Document not found"));
         return DocumentResponse.builder()
                 .id(document.getId())
                 .title(document.getTitle())
@@ -81,7 +81,7 @@ public class DocumentService {
     }
     @Transactional
     public String updateDocumentById(Long id, DocumentRequest request, DocumentStatus status, Principal principal) {
-        Document document = documentRepository.findById(id)
+        Document document = documentRepository.findByIdAndDeleted(id,false)
                 .orElseThrow(() -> new RuntimeException("Document not found"));
 
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
@@ -114,7 +114,7 @@ public class DocumentService {
     }
     @Transactional
     public String deleteDocumentById(Long id, Principal principal) {
-        Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
+        Document document = documentRepository.findByIdAndDeleted(id,false).orElseThrow(() -> new RuntimeException("Document not found"));
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         if (user.getName().equals(document.getCreatedBy().getName()) || user.getRole() == Role.ADMIN) {
             document.setDeleted(true);

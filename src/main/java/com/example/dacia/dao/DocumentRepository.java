@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, Long> {
@@ -18,14 +19,17 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
             "AND (:author IS NULL OR LOWER(d.createdBy.name) LIKE LOWER(CONCAT('%', :author, '%'))) " +
             "AND (:type IS NULL OR d.documentType = :type) " +
             "AND (:status IS NULL OR d.status = :status) " +
-            "AND d.isDeleted = false")
+            "AND d.deleted = false")
     List<Document> searchAndFilter(
             @Param("title") String title,
             @Param("author") String author,
             @Param("type") DocType type,
             @Param("status") DocumentStatus status);
 
-    Boolean isDeletedFalse();
 
+    Optional<Document> findByIdAndDeleted(Long id, boolean deleted);
 
+    boolean findByTitle(String title);
+
+    boolean existsByTitle(String title);
 }

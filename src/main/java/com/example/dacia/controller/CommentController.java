@@ -19,5 +19,6 @@ public class CommentController {
     public ResponseEntity<String> addComment(@PathVariable Long docId, @RequestBody CommentRequest comment, Principal principal) {
         return ResponseEntity.ok(commentService.save(docId,comment,principal));
     }
+    public ResponseEntity<String> deleteComment(@PathVariable Long docId, @PathVariable Long commentId, Principal principal) {}
 
 }
