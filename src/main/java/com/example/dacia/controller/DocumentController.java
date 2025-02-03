@@ -21,7 +21,7 @@ public class DocumentController {
     private final DocumentService documentService;
 
     @PostMapping
-    public ResponseEntity<String> createDocument(@RequestBody DocumentRequest document, Principal principal) {
+    public ResponseEntity<DocumentUpdateResponse> createDocument(@RequestBody DocumentRequest document, Principal principal) {
         return ResponseEntity.ok(documentService.save(document, principal));
     }
 
@@ -36,12 +36,12 @@ public class DocumentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateDocument(Principal principal, @PathVariable Long id, @RequestBody(required = false) DocumentRequest document) {
+    public ResponseEntity<DocumentUpdateResponse> updateDocument(Principal principal, @PathVariable Long id, @RequestBody(required = false) DocumentRequest document) {
         return ResponseEntity.ok(documentService.updateDocumentById(id, document, principal));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDocument(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<DocumentUpdateResponse> deleteDocument(@PathVariable Long id, Principal principal) {
         return ResponseEntity.ok(documentService.deleteDocumentById(id, principal));
     }
     @PutMapping("/status/{id}")

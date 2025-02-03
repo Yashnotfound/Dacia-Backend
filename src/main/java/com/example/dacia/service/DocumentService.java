@@ -31,12 +31,12 @@ public class DocumentService {
     private final DocumentReviewRepository documentReviewRepository;
 
     @Transactional
-    public String save(DocumentRequest request, Principal principal) {
+    public DocumentUpdateResponse save(DocumentRequest request, Principal principal) {
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
-        if(request.getTitle().isEmpty() || request.getTitle().trim().isEmpty()){
+        if (request.getTitle().isEmpty() || request.getTitle().trim().isEmpty()) {
             throw new RuntimeException("Title is empty");
         }
-        if(documentRepository.existsByTitle(request.getTitle())){
+        if (documentRepository.existsByTitle(request.getTitle())) {
             throw new RuntimeException("Title already exist");
         }
         var document = Document.builder()
@@ -50,7 +50,7 @@ public class DocumentService {
                 .status(DocumentStatus.PENDING)
                 .build();
         documentRepository.save(document);
-        return "Document saved";
+        return DocumentUpdateResponse.builder().message("Document Saved Successfully").build();
     }
 
     public List<DocumentResponse> findDocuments(String title, String author, DocType docType, DocumentStatus docStatus) {
@@ -73,7 +73,7 @@ public class DocumentService {
     }
 
     public DocumentResponse getDocumentById(Long id) {
-        Document document = documentRepository.findByIdAndDeleted(id,false).orElseThrow(() -> new RuntimeException("Document not found"));
+        Document document = documentRepository.findByIdAndDeleted(id, false).orElseThrow(() -> new RuntimeException("Document not found"));
         return DocumentResponse.builder()
                 .id(document.getId())
                 .title(document.getTitle())
@@ -85,9 +85,10 @@ public class DocumentService {
                 .lastModifiedDate(document.getLastUpdated())
                 .build();
     }
+
     @Transactional
-    public String updateDocumentById(Long id, DocumentRequest request, Principal principal) {
-        Document document = documentRepository.findByIdAndDeleted(id,false)
+    public DocumentUpdateResponse updateDocumentById(Long id, DocumentRequest request, Principal principal) {
+        Document document = documentRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new RuntimeException("Document not found"));
 
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
@@ -106,23 +107,23 @@ public class DocumentService {
             document.setLastUpdated(LocalDateTime.now());
             document.setStatus(DocumentStatus.PENDING);
         }
-        if(isAdmin)
-        {
+        if (isAdmin) {
             document.setStatus(DocumentStatus.APPROVED);
         }
         documentRepository.save(document);
-        return "Document updated successfully";
+        return DocumentUpdateResponse.builder().message("Document Updated Successfully").build();
     }
+
     @Transactional
-    public String deleteDocumentById(Long id, Principal principal) {
-        Document document = documentRepository.findByIdAndDeleted(id,false).orElseThrow(() -> new RuntimeException("Document not found"));
+    public DocumentUpdateResponse deleteDocumentById(Long id, Principal principal) {
+        Document document = documentRepository.findByIdAndDeleted(id, false).orElseThrow(() -> new RuntimeException("Document not found"));
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         if (user.getName().equals(document.getCreatedBy().getName()) || user.getRole() == Role.ADMIN) {
             document.setDeleted(true);
             document.setUpdatedBy(user);
             document.setLastUpdated(LocalDateTime.now());
             documentRepository.save(document);
-            return "Document deleted";
+            return DocumentUpdateResponse.builder().message("Document Deleted Successfully").build();
         }
         throw new RuntimeException("User not authorized");
     }
@@ -130,9 +131,8 @@ public class DocumentService {
     @Transactional
     public DocumentUpdateResponse updateDocumentStatus(@PathVariable Long id, DocumentReviewRequest request, Principal principal) {
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
-        if(user.getRole() == Role.ADMIN)
-        {
-            Document doc = documentRepository.findByIdAndDeleted(id,false).orElseThrow(() -> new RuntimeException("Document not found"));
+        if (user.getRole() == Role.ADMIN) {
+            Document doc = documentRepository.findByIdAndDeleted(id, false).orElseThrow(() -> new RuntimeException("Document not found"));
             DocumentReview review = DocumentReview.builder()
                     .admin(user)
                     .document(doc)
@@ -141,13 +141,12 @@ public class DocumentService {
                     .build();
             documentReviewRepository.save(review);
             DocumentStatus documentStatus = DocumentStatus.valueOf(request.getStatus().name());
-            if(documentStatus == doc.getStatus()){
+            if (documentStatus == doc.getStatus()) {
                 throw new RuntimeException("Document status is already set");
             }
             doc.setStatus(documentStatus);
             documentRepository.save(doc);
-        }
-        else{
+        } else {
             throw new RuntimeException("Only Admin can change status of a document");
         }
         return DocumentUpdateResponse.builder().message("Document Status Changed by Admin!!!").build();
