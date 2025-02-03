@@ -4,6 +4,7 @@ import com.example.dacia.dto.request.CommentRequest;
 import com.example.dacia.dto.response.CommentResponse;
 import com.example.dacia.dto.response.CommentUpdateResponse;
 import com.example.dacia.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping()
-    public ResponseEntity<CommentUpdateResponse> addComment(@PathVariable Long docId, @RequestBody CommentRequest comment, Principal principal) {
+    public ResponseEntity<CommentUpdateResponse> addComment(@PathVariable Long docId, @Valid @RequestBody CommentRequest comment, Principal principal) {
         return ResponseEntity.ok(commentService.save(docId,comment,principal));
     }
     @GetMapping()

@@ -7,6 +7,7 @@ import com.example.dacia.dto.response.DocumentUpdateResponse;
 import com.example.dacia.model.enums.DocType;
 import com.example.dacia.model.enums.DocumentStatus;
 import com.example.dacia.service.DocumentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class DocumentController {
     private final DocumentService documentService;
 
     @PostMapping
-    public ResponseEntity<DocumentUpdateResponse> createDocument(@RequestBody DocumentRequest document, Principal principal) {
+    public ResponseEntity<DocumentUpdateResponse> createDocument(@Valid @RequestBody DocumentRequest document, Principal principal) {
         return ResponseEntity.ok(documentService.save(document, principal));
     }
 
@@ -36,7 +37,7 @@ public class DocumentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DocumentUpdateResponse> updateDocument(Principal principal, @PathVariable Long id, @RequestBody(required = false) DocumentRequest document) {
+    public ResponseEntity<DocumentUpdateResponse> updateDocument(Principal principal, @PathVariable Long id, @Valid @RequestBody(required = false) DocumentRequest document) {
         return ResponseEntity.ok(documentService.updateDocumentById(id, document, principal));
     }
 
@@ -45,7 +46,7 @@ public class DocumentController {
         return ResponseEntity.ok(documentService.deleteDocumentById(id, principal));
     }
     @PutMapping("/status/{id}")
-    public ResponseEntity<DocumentUpdateResponse> reviewDocument(@PathVariable Long id, @RequestBody DocumentReviewRequest request, Principal principal) {
+    public ResponseEntity<DocumentUpdateResponse> reviewDocument(@PathVariable Long id, @Valid @RequestBody DocumentReviewRequest request, Principal principal) {
         return ResponseEntity.ok(documentService.updateDocumentStatus(id, request, principal));
     }
 
