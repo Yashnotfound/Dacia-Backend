@@ -29,5 +29,14 @@ public class DocumentController {
     public ResponseEntity<DocumentViewResponse> getDocument(@PathVariable Long id) {
         return ResponseEntity.ok(documentService.getDocumentById(id));
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateDocument(Principal principal,@PathVariable Long id,@RequestBody DocumentCreateRequest document)
+    {
+    return ResponseEntity.ok(documentService.updateDocumentById(id,document,principal));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteDocument(@PathVariable Long id, Principal principal) {
+        return ResponseEntity.ok(documentService.deleteDocumentById(id,principal));
+    }
 
 }

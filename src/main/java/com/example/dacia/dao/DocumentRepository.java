@@ -24,4 +24,6 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
             @Param("author") String author,
             @Param("type") DocType type,
             @Param("status") DocumentStatus status);
+
+
 }

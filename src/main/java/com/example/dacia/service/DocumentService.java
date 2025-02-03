@@ -8,6 +8,7 @@ import com.example.dacia.model.entities.Document;
 import com.example.dacia.model.entities.User;
 import com.example.dacia.model.enums.DocType;
 import com.example.dacia.model.enums.DocumentStatus;
+import com.example.dacia.model.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +60,7 @@ public class DocumentService {
 
     public DocumentViewResponse getDocumentById(Long id) {
         Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
+        if(document.isDeleted()){throw new RuntimeException("Document is deleted");}
             return DocumentViewResponse.builder()
                     .id(document.getId())
                     .title(document.getTitle())
@@ -69,6 +71,30 @@ public class DocumentService {
                     .lastModifiedBy(document.getUpdatedBy().getName())
                     .lastModifiedDate(document.getLastUpdated())
                     .build();
+    }
+    public String updateDocumentById(Long id,DocumentCreateRequest request, Principal principal) {
+        Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        if(user.getName().equals(document.getCreatedBy().getName())||user.getRole()== Role.ADMIN){
+            document.setTitle(request.getTitle());
+            document.setContent(request.getContent());
+            document.setUpdatedBy(user);
+            document.setLastUpdated(LocalDateTime.now());
+            document.setStatus(DocumentStatus.PENDING);
+            documentRepository.save(document);
+            return "Document updated";
+        }
+       throw new RuntimeException("User not authorized");
+    }
+    public String deleteDocumentById(Long id, Principal principal) {
+        Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        if(user.getName().equals(document.getCreatedBy().getName())||user.getRole()== Role.ADMIN) {
+            document.setDeleted(true);
+            documentRepository.save(document);
+            return "Document deleted";
+        }
+        throw new RuntimeException("User not authorized");
     }
 
 }
