@@ -4,6 +4,7 @@ import com.example.dacia.model.enums.DocType;
 import com.example.dacia.model.enums.DocumentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,5 +49,6 @@ public class Document {
     @JoinColumn()
     private User updatedBy;
 
-    private boolean isDeleted;
+    @Builder.Default
+    private boolean deleted = false;
 }

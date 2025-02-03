@@ -2,6 +2,7 @@ package com.example.dacia.model.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +33,7 @@ public class Comment {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-    private boolean isDeleted;
+
+    @Builder.Default
+    private boolean deleted = false;
 }
