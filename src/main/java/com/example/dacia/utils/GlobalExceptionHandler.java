@@ -1,7 +1,8 @@
-package com.example.dacia.exceptionHandler;
+package com.example.dacia.utils;
 
 import com.example.dacia.dto.response.ApiError;
 import com.example.dacia.dto.response.ErrorResponse;
+import com.example.dacia.exceptionHandler.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -85,6 +86,17 @@ public class GlobalExceptionHandler {
         });
         ApiError apiError = new ApiError("Validation failed", HttpStatus.BAD_REQUEST, errors);
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException ex) {
+        ErrorResponse error = new ErrorResponse("INVALID_TOKEN", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ExpiredTokenException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredToken(ExpiredTokenException ex) {
+        ErrorResponse error = new ErrorResponse("EXPIRED_TOKEN", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.GONE);
     }
 }
 

@@ -13,7 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table()
+@Table
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,7 +32,7 @@ public class Document {
     @Enumerated(EnumType.STRING)
     private DocumentStatus status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User createdBy;
 
@@ -45,7 +45,7 @@ public class Document {
     @UpdateTimestamp
     private LocalDateTime lastUpdated;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn()
     private User updatedBy;
 
