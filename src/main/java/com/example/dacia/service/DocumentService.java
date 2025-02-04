@@ -31,7 +31,7 @@ public class DocumentService {
     private final UserRepository userRepository;
     private final DocumentReviewRepository documentReviewRepository;
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public DocumentUpdateResponse save(DocumentRequest request, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -44,7 +44,7 @@ public class DocumentService {
             throw new DuplicateDocumentException("Title already exists");
         }
 
-        var document = Document.builder()
+        Document document = Document.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
                 .documentType(request.getType())
@@ -69,7 +69,7 @@ public class DocumentService {
         return mapToDocumentResponse(document);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public DocumentUpdateResponse updateDocumentById(Long id, DocumentRequest request, Principal principal) {
         Document document = documentRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new DocumentNotFoundException("Document not found"));
@@ -98,7 +98,7 @@ public class DocumentService {
         return DocumentUpdateResponse.builder().message("Document Updated Successfully").build();
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public DocumentUpdateResponse deleteDocumentById(Long id, Principal principal) {
         Document document = documentRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new DocumentNotFoundException("Document not found"));
@@ -115,7 +115,7 @@ public class DocumentService {
         throw new UnauthorizedException("User not authorized to delete this document");
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public DocumentUpdateResponse updateDocumentStatus(@PathVariable Long id, DocumentReviewRequest request, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));

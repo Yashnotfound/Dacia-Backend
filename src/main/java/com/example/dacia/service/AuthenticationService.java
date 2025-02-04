@@ -6,10 +6,7 @@ import com.example.dacia.dao.UserRepository;
 import com.example.dacia.dto.request.AuthenticationRequest;
 import com.example.dacia.dto.request.RegisterRequest;
 import com.example.dacia.dto.response.AuthenticationResponse;
-import com.example.dacia.exceptionHandler.EmailAlreadyExistsException;
-import com.example.dacia.exceptionHandler.ExpiredTokenException;
-import com.example.dacia.exceptionHandler.InvalidTokenException;
-import com.example.dacia.exceptionHandler.UserNotFoundException;
+import com.example.dacia.exceptionHandler.*;
 import com.example.dacia.model.entities.PasswordResetToken;
 import com.example.dacia.model.entities.User;
 import com.example.dacia.model.enums.Role;
@@ -17,8 +14,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,17 +26,16 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final JavaMailSender mailSender;
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public AuthenticationResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("Email already registered");
         }
 
-        var user = User.builder()
+        User user = User.builder()
                 .name(request.getUsername())
                 .email(request.getEmail())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
@@ -49,27 +43,24 @@ public class AuthenticationService {
                 .createdAt(LocalDateTime.now())
                 .build();
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(), request.getPassword()
-                )
-        );
-
-        var user = userRepository.findByEmail(request.getEmail())
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-        var jwtToken = jwtService.generateToken(user);
+        if(!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+            throw new UnauthorizedException("Wrong password");
+        }
+        String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .build();
     }
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void initiatePasswordReset(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -92,7 +83,7 @@ public class AuthenticationService {
         mailSender.send(message);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void completePasswordReset(String token, String newPassword) {
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token)
                 .orElseThrow(() -> new InvalidTokenException("Invalid token"));
@@ -102,8 +93,10 @@ public class AuthenticationService {
         }
 
         User user = resetToken.getUser();
+        if(passwordEncoder.matches(newPassword, user.getPasswordHash())) {
+            throw new UnauthorizedException("New password cannot be the same as the old password");
+        }
         user.setPasswordHash(passwordEncoder.encode(newPassword));
-//        user.setPasswordResetToken(null);
         userRepository.saveAndFlush(user);
         passwordResetTokenRepository.delete(resetToken);
     }
