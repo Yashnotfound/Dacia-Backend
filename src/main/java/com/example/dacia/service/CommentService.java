@@ -28,7 +28,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public CommentUpdateResponse save(long docId, CommentRequest request, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -62,7 +62,7 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public CommentUpdateResponse deleteComment(long docId, long commentId, Principal principal) {
         Document doc = documentRepository.findById(docId)
                 .orElseThrow(() -> new DocumentNotFoundException("Document not found"));
@@ -77,7 +77,7 @@ public class CommentService {
         Comment comment = commentRepository.findByIdAndDeleted(commentId, false)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
-        if (!comment.getDocument().equals(doc)) {
+        if (!comment.getDocument().getId().equals(doc.getId())) {
             throw new InvalidInputException("Document Id does not match");
         }
 

@@ -23,8 +23,5 @@ public class PasswordResetToken {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id")
     private User user;
-
-    private boolean active = true;
-
 }
 

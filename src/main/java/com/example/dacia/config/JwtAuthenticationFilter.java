@@ -46,13 +46,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                // ✅ Extract roles from JWT
                 List<String> roles = jwtService.extractRoles(jwt);
                 List<SimpleGrantedAuthority> authorities = roles.stream()
                         .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // Convert to ROLE_ format
                         .collect(Collectors.toList());
 
-                // ✅ Create authentication token with roles
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, authorities);
 
