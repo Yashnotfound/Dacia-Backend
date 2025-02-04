@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Entity
-@Table()
+@Table
 @Data
 @Builder
 @NoArgsConstructor
@@ -76,4 +76,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
 }

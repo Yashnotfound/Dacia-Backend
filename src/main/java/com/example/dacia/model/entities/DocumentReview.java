@@ -11,7 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table()
+@Table
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,6 +35,6 @@ public class DocumentReview {
     private String comments;
 
     @CreationTimestamp
-    @Column()
+    @Column
     private LocalDateTime lastReviewedAt;
 }
