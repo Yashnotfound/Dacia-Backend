@@ -1,0 +1,51 @@
+2025-02-05T12:02:46.745+05:30  INFO 68721 --- [dacia] [restartedMain] com.example.dacia.DaciaApplication       : Starting DaciaApplication using Java 17.0.12 with PID 68721 (/Users/userongrid/Downloads/dacia/build/classes/java/main started by userongrid in /Users/userongrid/Downloads/dacia)
+2025-02-05T12:02:46.746+05:30  INFO 68721 --- [dacia] [restartedMain] com.example.dacia.DaciaApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-02-05T12:02:46.759+05:30  INFO 68721 --- [dacia] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-05T12:02:46.760+05:30  INFO 68721 --- [dacia] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-05T12:02:47.017+05:30  INFO 68721 --- [dacia] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-02-05T12:02:47.041+05:30  INFO 68721 --- [dacia] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 20 ms. Found 5 JPA repository interfaces.
+2025-02-05T12:02:47.233+05:30  INFO 68721 --- [dacia] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-02-05T12:02:47.239+05:30  INFO 68721 --- [dacia] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-05T12:02:47.239+05:30  INFO 68721 --- [dacia] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-02-05T12:02:47.256+05:30  INFO 68721 --- [dacia] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-05T12:02:47.256+05:30  INFO 68721 --- [dacia] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 496 ms
+2025-02-05T12:02:47.300+05:30  INFO 68721 --- [dacia] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-05T12:02:47.322+05:30  INFO 68721 --- [dacia] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.5.Final
+2025-02-05T12:02:47.335+05:30  INFO 68721 --- [dacia] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-02-05T12:02:47.430+05:30  INFO 68721 --- [dacia] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-02-05T12:02:47.441+05:30  INFO 68721 --- [dacia] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-05T12:02:47.571+05:30  INFO 68721 --- [dacia] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@796cc22
+2025-02-05T12:02:47.571+05:30  INFO 68721 --- [dacia] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-05T12:02:47.604+05:30  INFO 68721 --- [dacia] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.40
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-02-05T12:02:47.904+05:30  INFO 68721 --- [dacia] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-05T12:02:47.958+05:30  INFO 68721 --- [dacia] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05T12:02:48.070+05:30  INFO 68721 --- [dacia] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-02-05T12:02:48.596+05:30  INFO 68721 --- [dacia] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-02-05T12:02:48.596+05:30  WARN 68721 --- [dacia] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-02-05T12:02:48.605+05:30  WARN 68721 --- [dacia] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-05T12:02:48.698+05:30 DEBUG 68721 --- [dacia] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-02-05T12:02:48.763+05:30  INFO 68721 --- [dacia] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-05T12:02:48.776+05:30  INFO 68721 --- [dacia] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-02-05T12:02:48.780+05:30  INFO 68721 --- [dacia] [restartedMain] com.example.dacia.DaciaApplication       : Started DaciaApplication in 2.162 seconds (process running for 2.384)
+2025-02-05T12:02:50.019+05:30  INFO 68721 --- [dacia] [scheduling-1] c.e.d.jobs.PasswordResetTokenCleanupJob  : Cleaning up expired tokens
+2025-02-05T12:02:50.084+05:30  INFO 68721 --- [dacia] [scheduling-1] c.e.d.jobs.PasswordResetTokenCleanupJob  : Total Expired Tokens Deleted: 0
+2025-02-05T12:03:00.007+05:30  INFO 68721 --- [dacia] [scheduling-1] c.e.d.jobs.PasswordResetTokenCleanupJob  : Cleaning up expired tokens
+2025-02-05T12:03:00.016+05:30  INFO 68721 --- [dacia] [scheduling-1] c.e.d.jobs.PasswordResetTokenCleanupJob  : Total Expired Tokens Deleted: 0
+2025-02-05T12:03:10.008+05:30  INFO 68721 --- [dacia] [scheduling-1] c.e.d.jobs.PasswordResetTokenCleanupJob  : Cleaning up expired tokens
+2025-02-05T12:03:10.013+05:30  INFO 68721 --- [dacia] [scheduling-1] c.e.d.jobs.PasswordResetTokenCleanupJob  : Total Expired Tokens Deleted: 0
+2025-02-05T12:03:20.008+05:30  INFO 68721 --- [dacia] [scheduling-1] c.e.d.jobs.PasswordResetTokenCleanupJob  : Cleaning up expired tokens
+2025-02-05T12:03:20.015+05:30  INFO 68721 --- [dacia] [scheduling-1] c.e.d.jobs.PasswordResetTokenCleanupJob  : Total Expired Tokens Deleted: 0
+2025-02-05T12:03:30.005+05:30  INFO 68721 --- [dacia] [scheduling-1] c.e.d.jobs.PasswordResetTokenCleanupJob  : Cleaning up expired tokens
+2025-02-05T12:03:30.012+05:30  INFO 68721 --- [dacia] [scheduling-1] c.e.d.jobs.PasswordResetTokenCleanupJob  : Total Expired Tokens Deleted: 0
+2025-02-05T12:03:38.696+05:30  INFO 68721 --- [dacia] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-05T12:03:38.701+05:30  INFO 68721 --- [dacia] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-02-05T12:03:38.705+05:30  INFO 68721 --- [dacia] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05T12:03:38.706+05:30  INFO 68721 --- [dacia] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-05T12:03:38.711+05:30  INFO 68721 --- [dacia] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
