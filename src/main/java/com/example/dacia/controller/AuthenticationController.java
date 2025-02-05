@@ -1,9 +1,10 @@
 package com.example.dacia.controller;
 
 import com.example.dacia.dto.request.AuthenticationRequest;
-import com.example.dacia.dto.request.RegisterRequest;
 import com.example.dacia.dto.request.ForgotPasswordRequest;
+import com.example.dacia.dto.request.RegisterRequest;
 import com.example.dacia.dto.response.AuthenticationResponse;
+import com.example.dacia.dto.response.UpdateResponse;
 import com.example.dacia.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,18 +32,16 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
-        authenticationService.initiatePasswordReset(request.getEmail());
-        return ResponseEntity.ok("Reset email sent");
+    public ResponseEntity<UpdateResponse> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        return ResponseEntity.ok(authenticationService.initiatePasswordReset(request.getEmail()));
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(
+    public ResponseEntity<UpdateResponse> resetPassword(
             @RequestParam String token,
             @RequestBody String newPassword
     ) {
-        authenticationService.completePasswordReset(token, newPassword);
-        return ResponseEntity.ok("Password updated successfully");
+        return ResponseEntity.ok(authenticationService.completePasswordReset(token, newPassword));
     }
 
 

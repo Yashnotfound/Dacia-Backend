@@ -3,7 +3,7 @@ package com.example.dacia.controller;
 import com.example.dacia.dto.request.DocumentRequest;
 import com.example.dacia.dto.request.DocumentReviewRequest;
 import com.example.dacia.dto.response.DocumentResponse;
-import com.example.dacia.dto.response.DocumentUpdateResponse;
+import com.example.dacia.dto.response.UpdateResponse;
 import com.example.dacia.model.enums.DocType;
 import com.example.dacia.model.enums.DocumentStatus;
 import com.example.dacia.service.DocumentService;
@@ -22,7 +22,7 @@ public class DocumentController {
     private final DocumentService documentService;
 
     @PostMapping
-    public ResponseEntity<DocumentUpdateResponse> createDocument(@Valid @RequestBody DocumentRequest document, Principal principal) {
+    public ResponseEntity<UpdateResponse> createDocument(@Valid @RequestBody DocumentRequest document, Principal principal) {
         return ResponseEntity.ok(documentService.save(document, principal));
     }
 
@@ -37,16 +37,16 @@ public class DocumentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DocumentUpdateResponse> updateDocument(Principal principal, @PathVariable Long id, @Valid @RequestBody(required = false) DocumentRequest document) {
+    public ResponseEntity<UpdateResponse> updateDocument(Principal principal, @PathVariable Long id, @Valid @RequestBody(required = false) DocumentRequest document) {
         return ResponseEntity.ok(documentService.updateDocumentById(id, document, principal));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DocumentUpdateResponse> deleteDocument(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<UpdateResponse> deleteDocument(@PathVariable Long id, Principal principal) {
         return ResponseEntity.ok(documentService.deleteDocumentById(id, principal));
     }
     @PutMapping("/status/{id}")
-    public ResponseEntity<DocumentUpdateResponse> reviewDocument(@PathVariable Long id, @Valid @RequestBody DocumentReviewRequest request, Principal principal) {
+    public ResponseEntity<UpdateResponse> reviewDocument(@PathVariable Long id, @Valid @RequestBody DocumentReviewRequest request, Principal principal) {
         return ResponseEntity.ok(documentService.updateDocumentStatus(id, request, principal));
     }
 

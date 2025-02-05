@@ -6,6 +6,7 @@ import com.example.dacia.dao.UserRepository;
 import com.example.dacia.dto.request.AuthenticationRequest;
 import com.example.dacia.dto.request.RegisterRequest;
 import com.example.dacia.dto.response.AuthenticationResponse;
+import com.example.dacia.dto.response.UpdateResponse;
 import com.example.dacia.exceptionHandler.*;
 import com.example.dacia.model.entities.PasswordResetToken;
 import com.example.dacia.model.entities.User;
@@ -61,7 +62,7 @@ public class AuthenticationService {
                 .build();
     }
     @Transactional(rollbackOn = Exception.class)
-    public void initiatePasswordReset(String email) {
+    public UpdateResponse initiatePasswordReset(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         String token = UUID.randomUUID().toString();
@@ -73,6 +74,7 @@ public class AuthenticationService {
 
         passwordResetTokenRepository.save(resetToken);
         sendResetEmail(user.getEmail(), token);
+        return UpdateResponse.builder().message("Email sent to change password!!!").build();
     }
 
     private void sendResetEmail(String email, String token) {
@@ -84,7 +86,7 @@ public class AuthenticationService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public void completePasswordReset(String token, String newPassword) {
+    public UpdateResponse completePasswordReset(String token, String newPassword) {
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token)
                 .orElseThrow(() -> new InvalidTokenException("Invalid token"));
 
@@ -99,6 +101,7 @@ public class AuthenticationService {
         user.setPasswordHash(passwordEncoder.encode(newPassword));
         userRepository.saveAndFlush(user);
         passwordResetTokenRepository.delete(resetToken);
+        return UpdateResponse.builder().message("Password Reset Successful").build();
     }
 
 }

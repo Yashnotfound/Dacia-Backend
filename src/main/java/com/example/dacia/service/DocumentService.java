@@ -6,7 +6,7 @@ import com.example.dacia.dao.UserRepository;
 import com.example.dacia.dto.request.DocumentRequest;
 import com.example.dacia.dto.request.DocumentReviewRequest;
 import com.example.dacia.dto.response.DocumentResponse;
-import com.example.dacia.dto.response.DocumentUpdateResponse;
+import com.example.dacia.dto.response.UpdateResponse;
 import com.example.dacia.exceptionHandler.*;
 import com.example.dacia.model.entities.Document;
 import com.example.dacia.model.entities.DocumentReview;
@@ -32,7 +32,7 @@ public class DocumentService {
     private final DocumentReviewRepository documentReviewRepository;
 
     @Transactional(rollbackOn = Exception.class)
-    public DocumentUpdateResponse save(DocumentRequest request, Principal principal) {
+    public UpdateResponse save(DocumentRequest request, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
@@ -55,7 +55,7 @@ public class DocumentService {
                 .status(DocumentStatus.PENDING)
                 .build();
         documentRepository.save(document);
-        return DocumentUpdateResponse.builder().message("Document Saved Successfully").build();
+        return UpdateResponse.builder().message("Document Saved Successfully").build();
     }
 
     public List<DocumentResponse> findDocuments(String title, String author, DocType docType, DocumentStatus docStatus) {
@@ -70,7 +70,7 @@ public class DocumentService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public DocumentUpdateResponse updateDocumentById(Long id, DocumentRequest request, Principal principal) {
+    public UpdateResponse updateDocumentById(Long id, DocumentRequest request, Principal principal) {
         Document document = documentRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new DocumentNotFoundException("Document not found"));
 
@@ -95,11 +95,11 @@ public class DocumentService {
             document.setStatus(DocumentStatus.APPROVED);
         }
         documentRepository.save(document);
-        return DocumentUpdateResponse.builder().message("Document Updated Successfully").build();
+        return UpdateResponse.builder().message("Document Updated Successfully").build();
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public DocumentUpdateResponse deleteDocumentById(Long id, Principal principal) {
+    public UpdateResponse deleteDocumentById(Long id, Principal principal) {
         Document document = documentRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new DocumentNotFoundException("Document not found"));
         User user = userRepository.findByEmail(principal.getName())
@@ -110,13 +110,13 @@ public class DocumentService {
             document.setUpdatedBy(user);
             document.setLastUpdated(LocalDateTime.now());
             documentRepository.save(document);
-            return DocumentUpdateResponse.builder().message("Document Deleted Successfully").build();
+            return UpdateResponse.builder().message("Document Deleted Successfully").build();
         }
         throw new UnauthorizedException("User not authorized to delete this document");
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public DocumentUpdateResponse updateDocumentStatus(@PathVariable Long id, DocumentReviewRequest request, Principal principal) {
+    public UpdateResponse updateDocumentStatus(@PathVariable Long id, DocumentReviewRequest request, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
@@ -143,7 +143,7 @@ public class DocumentService {
         doc.setStatus(documentStatus);
         documentRepository.save(doc);
 
-        return DocumentUpdateResponse.builder().message("Document Status Changed by Admin!!!").build();
+        return UpdateResponse.builder().message("Document Status Changed by Admin!!!").build();
     }
 
     private DocumentResponse mapToDocumentResponse(Document document) {

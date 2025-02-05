@@ -5,7 +5,7 @@ import com.example.dacia.dao.DocumentRepository;
 import com.example.dacia.dao.UserRepository;
 import com.example.dacia.dto.request.CommentRequest;
 import com.example.dacia.dto.response.CommentResponse;
-import com.example.dacia.dto.response.CommentUpdateResponse;
+import com.example.dacia.dto.response.UpdateResponse;
 import com.example.dacia.exceptionHandler.*;
 import com.example.dacia.model.entities.Comment;
 import com.example.dacia.model.entities.Document;
@@ -29,7 +29,7 @@ public class CommentService {
     private final DocumentRepository documentRepository;
 
     @Transactional(rollbackOn = Exception.class)
-    public CommentUpdateResponse save(long docId, CommentRequest request, Principal principal) {
+    public UpdateResponse save(long docId, CommentRequest request, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         Document doc = documentRepository.findById(docId)
@@ -46,7 +46,7 @@ public class CommentService {
                 .createdAt(LocalDateTime.now())
                 .build();
         commentRepository.save(comment);
-        return CommentUpdateResponse.builder().message("Comment Successfully Added!!!").build();
+        return UpdateResponse.builder().message("Comment Successfully Added!!!").build();
     }
 
     public List<CommentResponse> showAllComments(long docId) {
@@ -63,7 +63,7 @@ public class CommentService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public CommentUpdateResponse deleteComment(long docId, long commentId, Principal principal) {
+    public UpdateResponse deleteComment(long docId, long commentId, Principal principal) {
         Document doc = documentRepository.findById(docId)
                 .orElseThrow(() -> new DocumentNotFoundException("Document not found"));
 
@@ -88,6 +88,6 @@ public class CommentService {
             throw new UnauthorizedException("User not authorized to delete this comment");
         }
 
-        return CommentUpdateResponse.builder().message("Comment Deleted Successfully!!!").build();
+        return UpdateResponse.builder().message("Comment Deleted Successfully!!!").build();
     }
 }
