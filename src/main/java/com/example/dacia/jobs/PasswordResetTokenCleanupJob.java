@@ -21,7 +21,7 @@ public class PasswordResetTokenCleanupJob {
         this.tokenRepository = tokenRepository;
     }
 
-    @Scheduled(cron = "*/10 * * * * ?")
+    @Scheduled(cron = "0 */10 * * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void cleanUpExpiredTokens() {
         logger.info("Cleaning up expired tokens");

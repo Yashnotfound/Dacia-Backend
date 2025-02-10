@@ -47,6 +47,7 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
+                .username(user.getName())
                 .build();
     }
 
@@ -59,6 +60,7 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
+                .username(user.getName())
                 .build();
     }
     @Transactional(rollbackOn = Exception.class)

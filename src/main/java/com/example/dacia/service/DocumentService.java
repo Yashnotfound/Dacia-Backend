@@ -47,6 +47,7 @@ public class DocumentService {
         Document document = Document.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
+                .description(request.getDescription())
                 .documentType(request.getType())
                 .createdBy(user)
                 .updatedBy(user)
@@ -151,11 +152,9 @@ public class DocumentService {
                 .id(document.getId())
                 .title(document.getTitle())
                 .content(document.getContent())
-                .type(document.getDocumentType())
-                .createdBy(document.getCreatedBy().getName())
-                .createdDate(document.getCreatedAt())
+                .author(document.getCreatedBy().getName())
+                .description(document.getDescription())
                 .lastModifiedBy(document.getUpdatedBy().getName())
-                .lastModifiedDate(document.getLastUpdated())
                 .build();
     }
 }

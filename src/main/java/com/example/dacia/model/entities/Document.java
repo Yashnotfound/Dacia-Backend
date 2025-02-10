@@ -29,6 +29,8 @@ public class Document {
     @Lob // For large text content
     private String content;
 
+    private String description;
+
     @Enumerated(EnumType.STRING)
     private DocumentStatus status;
 
