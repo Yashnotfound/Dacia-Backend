@@ -154,7 +154,7 @@ public class DocumentService {
                 .content(document.getContent())
                 .author(document.getCreatedBy().getName())
                 .description(document.getDescription())
-                .lastModifiedBy(document.getUpdatedBy().getName())
+                .createdAt(document.getCreatedAt())
                 .build();
     }
 }
